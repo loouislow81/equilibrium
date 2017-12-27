@@ -1,38 +1,55 @@
 #!/usr/bin/env bash
 #
 # @@script: equilibrium.sh
-# @@description: The Core
+# @@description: Equilibrium Core
 # @@author: Loouis Low
 # @@copyright:
 # @@license: MIT License
 #
+
+binary=$(basename $0 | sed "s/\.sh$//")
+
+###### vars ######
+
+# ansi
+blue='\e[94m'
+cyan='\e[36m'
+green='\e[92m'
+red='\e[91m'
+dgray='\e[90m'
+lgray='\e[37m'
+bggray='\e[100m'
+bgcyan='\e[46m'
+nc='\033[0m'
+bold=$(tput bold)
+normal=$(tput sgr0)
+tag='\e[100m'
+title="${blue}(equilibrium)${nc}"
+arrow="${red}>>${nc}"
 
 # -----------------------------------------------------------------------------
 # Check if Rsync installed
 # -----------------------------------------------------------------------------
 
 if ! [ -x "$(command -v rsync)" ]; then
-  echo
-  echo '[equilibrium] installing rsync...' >&2
-  echo
-  sudo apt-get install -y rsync
-  echo
+  echo;echo '$title installing rsync...' >&2;echo
+  sudo apt install -y rsync;echo
 fi
 
-APPNAME=$(basename $0 | sed "s/\.sh$//")
+APPNAME="${blue}($binary)${nc}"
 
 # -----------------------------------------------------------------------------
 # Log functions
 # -----------------------------------------------------------------------------
 
-fn_log_info()  { echo "$APPNAME: $1"; }
-fn_log_warn()  { echo "$APPNAME: [WARNING] $1" 1>&2; }
-fn_log_error() { echo "$APPNAME: [ERROR] $1" 1>&2; }
+fn_log_info()  { echo -e "$APPNAME $1"; }
+fn_log_warn()  { echo -e "$APPNAME ${red}(WARNING)${nc} $1" 1>&2; }
+fn_log_error() { echo -e "$APPNAME ${red}([ERROR)${nc} $1" 1>&2; }
 fn_log_info_cmd()  {
   if [ -n "$SSH_CMD" ]; then
-    echo "[$APPNAME] $SSH_CMD '$1'";
+    echo -e "$APPNAME $SSH_CMD '$1'";
   else
-    echo "[$APPNAME] $1";
+    echo -e "$APPNAME $1";
   fi
 }
 
@@ -54,17 +71,13 @@ fn_display_usage() {
 
   clear
 
-  echo ""
-  echo "#### equilibrium #####################################################"
-  echo ""
-  echo "Usage: $(basename $0) [OPTION]... <SOURCE> <[USER@HOST:]DESTINATION> [exclude-pattern-file]"
-  echo ""
+  echo;echo "#### equilibrium #####################################################";echo
+  echo "Usage: $(basename $0) [OPTION]... <SOURCE> <[USER@HOST:]DESTINATION> [exclude-pattern-file]";echo
   echo "Options"
-  echo " -p, --port           SSH port."
-  echo " -h, --help           Display this help message."
-  echo " --rsync-get-flags    Display the default rsync flags that are used for backup."
-  echo " --rsync-set-flags    Set the rsync flags that are going to be used for backup."
-  echo ""
+  echo " -p, --port           SSH port"
+  echo " -h, --help           Display this help message"
+  echo " --rsync-get-flags    Display the default rsync flags that are used for backup"
+  echo " --rsync-set-flags    Set the rsync flags that are going to be used for backup";echo
 }
 
 fn_parse_date() {
@@ -114,7 +127,7 @@ fn_run_cmd() {
 }
 
 fn_find() {
-  fn_run_cmd "find '$1'"  2>/dev/null
+  fn_run_cmd "find '$1'"  2> /dev/null
 }
 
 fn_get_absolute_path() {
@@ -235,13 +248,13 @@ done
 # TODO: check that the destination supports hard links
 
 fn_backup_marker_path() { echo "$1/backup.marker"; }
-fn_find_backup_marker() { fn_find "$(fn_backup_marker_path "$1")" 2>/dev/null; }
+fn_find_backup_marker() { fn_find "$(fn_backup_marker_path "$1")" 2> /dev/null; }
 
 if [ -z "$(fn_find_backup_marker "$DEST_FOLDER")" ]; then
   fn_log_info "Safety check failed - the destination does not appear to be a backup folder or drive (marker file not found)."
   fn_log_info "If it is indeed a backup folder, you may add the marker file by running the following command:"
   fn_log_info ""
-  fn_log_info_cmd "mkdir -p -- \"$DEST_FOLDER\" ; touch \"$(fn_backup_marker_path "$DEST_FOLDER")\""
+  fn_log_info_cmd "mkdir -p \"$DEST_FOLDER\"; touch \"$(fn_backup_marker_path "$DEST_FOLDER")\""
   fn_log_info ""
   exit 1
 fi
@@ -317,7 +330,7 @@ while : ; do
     fn_log_info "No previous backup - creating new one."
   else
     # If the path is relative, it needs to be relative to the destination. To keep
-    # it simple, just use an absolute path. See http://serverfault.com/a/210058/118679
+    # it simple, just use an absolute path.
     PREVIOUS_DEST="$(fn_get_absolute_path "$PREVIOUS_DEST")"
     fn_log_info "Previous backup found - doing incremental backup from $SSH_FOLDER_PREFIX$PREVIOUS_DEST"
     LINK_DEST_OPTION="--link-dest='$PREVIOUS_DEST'"
@@ -327,7 +340,7 @@ while : ; do
   # Create destination folder if it doesn't already exists
   # -----------------------------------------------------------------------------
 
-  if [ -z "$(fn_find "$DEST -type d" 2>/dev/null)" ]; then
+  if [ -z "$(fn_find "$DEST -type d" 2> /dev/null)" ]; then
     fn_log_info "Creating destination $SSH_FOLDER_PREFIX$DEST"
     fn_mkdir "$DEST"
   fi
