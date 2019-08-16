@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 #
-# @@script: equilibrium.sh
+# @@script: equilibrium_engine
 # @@description: Equilibrium Core
 # @@author: Loouis Low
-# @@copyright:
+# @@copyright: Loouis Low (https://loouislow81.github.io)
 # @@license: MIT License
 #
 
@@ -26,6 +26,7 @@ normal=$(tput sgr0)
 tag='\e[100m'
 title="${blue}(equilibrium)${nc}"
 arrow="${red}>>${nc}"
+bandwidth_limit=30000
 
 # -----------------------------------------------------------------------------
 # Check if Rsync installed
@@ -165,7 +166,7 @@ SRC_FOLDER=""
 DEST_FOLDER=""
 EXCLUSION_FILE=""
 
-RSYNC_FLAGS="-D --compress --numeric-ids --links --hard-links --one-file-system --itemize-changes --times --recursive --perms --owner --group"
+RSYNC_FLAGS="-D --compress --partial --bwlimit=${bandwidth_limit} --numeric-ids --links --hard-links --one-file-system --itemize-changes --times --recursive --perms --owner --group"
 
 while :; do
   case $1 in

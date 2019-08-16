@@ -2,116 +2,66 @@
 #
 # @@script: backup.sh
 # @@description: incremental backup init script
-# @@author: Loouis Low
-# @@copyright:
+# @@author: Loouis Low <loouis@gmail.com>
 # @@license: MIT License
+# @@copyright: Loouis Low (https://github.com/loouislow81/equilibrium)
 #
 
-###### vars ######
-
 # ansi
-blue='\e[94m'
-cyan='\e[36m'
-green='\e[92m'
-red='\e[91m'
-dgray='\e[90m'
-lgray='\e[37m'
-bggray='\e[100m'
-bgcyan='\e[46m'
-nc='\033[0m'
-bold=$(tput bold)
-normal=$(tput sgr0)
-tag='\e[100m'
-title="${blue}(equilibrium)${nc}"
-arrow="${red}>>${nc}"
+RED='\e[91m'
+NC='\033[0m'
+TITLE="${RED}(equilibrium)${NC}"
+ARROW="${RED}>>${NC}"
+MSG_DELETED="${RED}(deleted!)${NC}"
+MSG_DIR_SIZE="${RED}($GET_DIR_SIZE)${NC}"
 
 # configurations
 export USER="loouis"
-export HOME="/media/loouis/Storage"
+export HOME="/media/loouis/EX-VOLUME"
 BACKUP_DIR="${HOME}/backup"
 DEST_DIR="usr-loouis"
-MEDIUM="/media/loouis/Storage"
+MEDIUM="/media/loouis/EX-VOLUME"
 BACKUP_SOURCE="/home/loouis"
 BACKUP_DESTINATION="${MEDIUM}/backup/usr-loouis"
-BACKUP_SIZE="/dev/sda"
-FLTR_FOLDER_1="Downloads"
-FLTR_FOLDER_2="Music"
-FLTR_FOLDER_3="Videos"
-FLTR_FOLDER_4="Pictures"
-FLTR_FOLDER_5="log"
-FLTR_FOLDER_6="Public"
-FLTR_FOLDER_7=".cache"
-LOG="/home/loouis/.log/backup.log"
+BACKUP_SIZE="/dev/sda2"
+LOG="${BACKUP_SOURCE}/backup.log"
+DEL_DIRS_CONF="/usr/loca/bin/directories.conf"
 
-###### funcs ######
-
-function root_only() {
+root_only() {
   if [ "$(whoami &2> /dev/null)" != "root" ] &&
-     [ "$(id -un &2> /dev/null)" != "root" ]
-  then
-    echo -e "$title permission denied."
+     [ "$(id -un &2> /dev/null)" != "root" ]; then
+    echo -e "$TITLE permission denied."
     exit 1
   fi
 }
 
-function create_marker() {
-  echo -e "$title create backup marker..."
+create_marker() {
+  echo -e "$TITLE create backup marker..."
   mkdir -p "$BACKUP_DESTINATION"
   touch "$BACKUP_DESTINATION/backup.marker"
 }
 
-function run_backup() {
-  echo -e "$title started..."
+run_backup() {
+  echo -e "$TITLE started..."
   equilibrium ${BACKUP_SOURCE} ${BACKUP_DESTINATION}
-  echo -e "$title backup $arrow done!"
+  echo -e "$TITLE backup $ARROW done!"
 }
 
-function optimize_backup() {
-  echo -e "$TITLE optimizing backup..."
-
-  find $BACKUP_DIR/$DEST_DIR \
-    -name ${FLTR_FOLDER_1} \
-    -exec rm -r {} \;
-  echo -e "$title Downloads $arrow folder removed!"
-
-  find $BACKUP_DIR/$DEST_DIR \
-    -name ${FLTR_FOLDER_2} \
-    -type d -exec rm -r {} \;
-  echo -e "$title Musics $arrow folder removed!"
-
-  find $BACKUP_DIR/$DEST_DIR \
-    -name ${FLTR_FOLDER_3} \
-    -type d -exec rm -r {} \;
-  echo -e "$title Videos $arrow folder removed!"
-
-  find $BACKUP_DIR/$DEST_DIR \
-    -name ${FLTR_FOLDER_4} \
-    -type d -exec rm -r {} \;
-  echo -e "$title Pictures $arrow folder removed!"
-
-  find $BACKUP_DIR/$DEST_DIR \
-    -name $FLTR_FOLDER_5 \
-    -type d -exec rm -r {} \;
-  echo -e "$title log $arrow folder removed!"
-
-  find $BACKUP_DIR/$DEST_DIR \
-    -name ${FLTR_FOLDER_6} \
-    -type d -exec rm -r {} \;
-  echo -e "$title Public $arrow folder removed!"
-  
-  find $BACKUP_DIR/$DEST_DIR \
-    -name ${FLTR_FOLDER_7} \
-    -exec rm -r {} \;
-  echo -e "$title Cache $arrow folder removed!"  
+shrink_volume() {
+  for s in $(cat ${DEL_DIRS_CONF}); do
+    GET_DIR_SIZE=`du -hs ${s} | awk '{ print $1 }'`
+    echo -e " $ARROW ${GET_DIR_SIZE} $s ${MSG_DELETED}"
+    rm -rf "$s"
+  done
 }
 
-function show_backup_size() {
-  echo -e "$title getting backup size..."
+backup_size() {
+  echo -e "$TITLE calculate backup size..."
   df -h ${BACKUP_SIZE}
 }
 
-function write_log() {
-  echo -e "$title sync finished at " `date` $arrow ${LOG}
+write_log() {
+  echo -e "$TITLE sync finished at " `date` $ARROW ${LOG}
 }
 
 ###### init ######
@@ -119,7 +69,7 @@ function write_log() {
 root_only
 create_marker
 run_backup
-optimize_backup
+shrink_volume
 write_log
-show_backup_size
+backup_size
 
