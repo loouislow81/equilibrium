@@ -36,6 +36,7 @@ I wrote this because at my workplace has a terrible IT culture. That backing dat
 - continuously resume backup with a marker system.
 - auto generates path to the latest backup volume.
 - auto exclude residual files and directories.
+- generate statistics after finished backup session.
 
 
 ### _get
