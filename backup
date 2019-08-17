@@ -72,7 +72,10 @@ while test "$#" -gt 0; do
       echo -e "   -i, --install ............... Install to your system"
       echo -e "   -r, --run ................... Run/Resume backup session"
       echo -e "   -e, --exclusion ............. Edit exclusion list"
-      echo -e "   -c, --config ..............., Edit settings";echo
+      echo -e "   -c, --config ................ Edit settings";echo
+      echo -e " ${bold}Utility:${normal}"
+      echo -e "   -l, --show-log .............. Show log files"
+      echo -e "   -p, --purge-log ............. Purge log files";echo
       echo -e " Visit repository $arrow (https://github.com/loouislow81/equilibrium)"
       echo -e " Submit issue $arrow (https://github.com/loouislow81/equilibrium/issues)";echo
       exit 1
@@ -104,6 +107,18 @@ while test "$#" -gt 0; do
       run_as_root
       nano /etc/equilibrium.conf
       echo -e "$title (?) setting file is in $arrow /etc/equilibrium.conf";echo
+    shift;;
+
+    -l|--show-log)
+    shift
+      cd $HOME/.equilibrium-core
+      ls -l
+    shift;;
+
+    -p|--purge-log)
+    shift
+      run_as_root
+      rm -rfv $HOME/.equilibrium-core/*
     shift;;
 
     *) break;;
