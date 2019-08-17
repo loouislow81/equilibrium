@@ -25,22 +25,22 @@ fi
 
 # logging
 fn_log_info() {
-  echo -e "$APPNAME $1"
+  echo -e "$title $1"
 }
 
 fn_log_warn() {
-  echo -e "$APPNAME ${red}(WARNING)${nc} $1" 1>&2
+  echo -e "$title ${red}(WARNING)${nc} $1" 1>&2
 }
 
 fn_log_error() {
-  echo -e "$APPNAME ${red}([ERROR)${nc} $1" 1>&2
+  echo -e "$title ${red}([ERROR)${nc} $1" 1>&2
 }
 
 fn_log_info_cmd() {
   if [ -n "$SSH_CMD" ]; then
-    echo -e "$APPNAME $SSH_CMD '$1'"
+    echo -e "$title $SSH_CMD '$1'"
   else
-    echo -e "$APPNAME $1"
+    echo -e "$title $1"
   fi
 }
 
