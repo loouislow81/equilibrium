@@ -1,56 +1,37 @@
 #!/bin/bash
 #
 # @@script: backup.sh
-# @@description: incremental backup init script
-# @@author: Loouis Low
-# @@copyright: Loouis Low (https://loouislow81.github.io)
+# @@description: equilibrium main run script
+# @@author: Loouis Low (loouis@gmail.com)
+# @@copyright: Loouis Low (https://github.com/loouislow81/equilibrium)
 # @@license: MIT
 #
 
-###### vars ######
+###### imports ######
 
-# ansi
-blue='\e[94m'
-cyan='\e[36m'
-green='\e[92m'
-red='\e[91m'
-dgray='\e[90m'
-lgray='\e[37m'
-bggray='\e[100m'
-bgcyan='\e[46m'
-nc='\033[0m'
-bold=$(tput bold)
-normal=$(tput sgr0)
-tag='\e[100m'
-title="${blue}(equilibrium)${nc}"
-arrow="${red}>>${nc}"
-
-# configurations
-export USER="yourname"
-export HOME="/path/to/backup/destination"
-BACKUP_DIR="${HOME}/.backup"
-DEST_DIR="usr-${USER}"
-MEDIUM="${HOME}"
-BACKUP_SOURCE="/path/to/backup/target"
-BACKUP_DESTINATION="${MEDIUM}/.backup/usr-${USER}"
-BACKUP_SIZE="/dev/sdb1"
-FLTR_FOLDER_1="Downloads"
-FLTR_FOLDER_2="Music"
-FLTR_FOLDER_3="Videos"
-FLTR_FOLDER_4="Pictures"
-FLTR_FOLDER_5="log"
-FLTR_FOLDER_6="Public"
-FLTR_FOLDER_7=".cache"
-LOG="/home/${USER}/.log/backup.log"
+source /etc/equilibrium.conf
 
 ###### funcs ######
 
-root_only() {
+run_as_root() {
   if [ "$(whoami &2> /dev/null)" != "root" ] &&
      [ "$(id -un &2> /dev/null)" != "root" ]; then
-    echo -e "$title permission denied."
+    echo -e "$title permission denied.";echo
     exit 1
   fi
+}
+
+function copy_files() {
+  #--- arg
+  files=$1
+  copy_to_destination=$2
+  #--- arr
+  get_files=($files)
+  #--- worker
+  for w in "${get_files[@]}"; do
+    cp -r $PWD/${w} ${copy_to_destination}
+    echo -e "$title ${w} copied to $arrow ${copy_to_destination} (OK)"
+  done
 }
 
 create_marker() {
@@ -61,64 +42,71 @@ create_marker() {
 
 run_backup() {
   echo -e "$title started..."
-  equilibrium ${BACKUP_SOURCE} ${BACKUP_DESTINATION}
+  equilibrium-core ${BACKUP_SOURCE} ${BACKUP_DESTINATION}
   echo -e "$title backup $arrow done!"
 }
 
-optimize_backup() {
-  echo -e "$TITLE optimizing backup..."
-
-  find $BACKUP_DIR/$DEST_DIR \
-    -name ${FLTR_FOLDER_1} \
-    -exec rm -r {} \;
-  echo -e "$title Downloads $arrow folder removed!"
-
-  find $BACKUP_DIR/$DEST_DIR \
-    -name ${FLTR_FOLDER_2} \
-    -type d -exec rm -r {} \;
-  echo -e "$title Musics $arrow folder removed!"
-
-  find $BACKUP_DIR/$DEST_DIR \
-    -name ${FLTR_FOLDER_3} \
-    -type d -exec rm -r {} \;
-  echo -e "$title Videos $arrow folder removed!"
-
-  find $BACKUP_DIR/$DEST_DIR \
-    -name ${FLTR_FOLDER_4} \
-    -type d -exec rm -r {} \;
-  echo -e "$title Pictures $arrow folder removed!"
-
-  find $BACKUP_DIR/$DEST_DIR \
-    -name $FLTR_FOLDER_5 \
-    -type d -exec rm -r {} \;
-  echo -e "$title log $arrow folder removed!"
-
-  find $BACKUP_DIR/$DEST_DIR \
-    -name ${FLTR_FOLDER_6} \
-    -type d -exec rm -r {} \;
-  echo -e "$title Public $arrow folder removed!"
-
-  find $BACKUP_DIR/$DEST_DIR \
-    -name ${FLTR_FOLDER_7} \
-    -exec rm -r {} \;
-  echo -e "$title Cache $arrow folder removed!"
-}
-
-show_backup_size() {
-  echo -e "$title getting backup size..."
-  df -h ${BACKUP_SIZE}
-}
-
-write_log() {
-  echo -e "$title sync finished at `date` $arrow ${LOG}"
+banner() {
+  echo -e "${blue}                   _ _ _ _          _                 "
+  echo -e "                  (_) (_) |        (_)                "
+  echo -e "   ___  __ _ _   _ _| |_| |__  _ __ _ _   _ _ __ ___  "
+  echo -e "  / _ \/ _' | | | | | | | '_ \| '__| | | | | '_ ' _ \ "
+  echo -e " |  __/ (_| | |_| | | | | |_) | |  | | |_| | | | | | |"
+  echo -e "  \___|\__, |\__,_|_|_|_|_.__/|_|  |_|\__,_|_| |_| |_|"
+  echo -e "          | |                                         "
+  echo -e "          |_|${normal}";echo
 }
 
 ###### init ######
 
-root_only
-create_marker
-run_backup
-optimize_backup
-write_log
-show_backup_size
+banner
+echo -e "${bold} $ backup [--help|--install|--run|--exclusion|--config] ${normal}";echo
 
+while test "$#" -gt 0; do
+  case "$1" in
+
+    -h|--help)
+    shift
+      echo;echo -e " ${bold}Usage:${normal}"
+      echo -e "   -h, --help .................. Display this information"
+      echo -e "   -i, --install ............... Install to your system"
+      echo -e "   -r, --run ................... Run/Resume backup session"
+      echo -e "   -e, --exclusion ............. Edit exclusion list"
+      echo -e "   -c, --config ..............., Edit settings";echo
+      echo -e " Visit repository $arrow (https://github.com/loouislow81/equilibrium)"
+      echo -e " Submit issue $arrow (https://github.com/loouislow81/equilibrium/issues)";echo
+      exit 1
+    shift;;
+
+    -i|--install)
+    shift
+      run_as_root
+      copy_files "backup equilibrium-core" "/usr/local/bin/"
+      copy_files "equilibrium.conf equilibrium-exclusion.list" "/etc/"
+    shift;;
+
+    -r|--run)
+    shift
+      run_as_root
+      create_marker
+      run_backup
+    shift;;
+
+    -e|--exclusion)
+    shift
+      run_as_root
+      nano /etc/equilibrium-exclusion.list
+      echo -e "$title (?) exclusion list is in $arrow /etc/equilibrium-exclusion.list";echo
+    shift;;
+
+    -c|--config)
+    shift
+      run_as_root
+      nano /etc/equilibrium.conf
+      echo -e "$title (?) setting file is in $arrow /etc/equilibrium.conf";echo
+    shift;;
+
+    *) break;;
+
+  esac
+done

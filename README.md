@@ -1,66 +1,102 @@
 # equilibrium
 
-> Time machine backup solution for Linux, Mac
+> Time machine backup solution for Linux
 
-I wrote this because my working place has a terribly bad IT culture. 'equilibrium' helps me incrementally backup changes on my primary drive to other drives. You can put it on cronjob as well.
+I wrote this because at my workplace has a terrible IT culture. That backing data is an optional practice. **Equilibrium** helps me to  incrementally backup changes on my working computer, I need something very straight forward and lightweight but not sacrifying the backup performance or even hogging the host system. And I also can even configure with `crontab`.
 
-- `backup` is an init script.
-- `equilibrium` is a core application script.
+### _files
+
+- `backup` is an main script.
+- `equilibrium-core` is a core script.
+- `equilibrium.conf` is where settings are located.
+- `equilibrium-exclusion.list` is where you can add exclusion files and directories.
+
+### _volume structure
+
+```bash
+.
+├── 2019-08-17-144927       (e.g. volume 1)
+├── 2019-08-17-154805       (e.g. volume 2)
+├── 2019-08-17-155055       (e.g. volume 3)
+├── backup.inprogress       (resume indicator)
+├── backup.marker           (resume marker data)
+└── latest                  (endpoint to latest backup)
+```
 
 ### _features
 
-- each backup volume is determined by date.
-- continuously resume backup with marker system.
+- each backup volume is determined by date per backup session.
+- continuously resume backup with a marker system.
 - auto generates path to the latest backup volume.
-- auto remove residual files and directories.
+- auto exclude residual files and directories.
+
+
+### _get
+
+```bash
+$ git clone https://github.com/loouislow81/equilibrium.git
+$ cd equilibrium
+```
 
 ### _install
 
 ```bash
-$ cp -r backup /usr/local/bin
-$ cp -r equilibrium /usr/local/bin
+$ sudo ./backup --install
 ```
 
 ### _configure
 
-edit script file `backup` and change whatever necessary on your system,
+after installed you can use without the `./` and it is ready to run system-wide,
 
 ```bash
-# configurations
-export USER="yourname"
-export HOME="/path/to/backup/destination"
-BACKUP_DIR="${HOME}/.backup"
-DEST_DIR="usr-${USER}"
-MEDIUM="${HOME}"
-BACKUP_SOURCE="/path/to/backup/target"
-BACKUP_DESTINATION="${MEDIUM}/.backup/${DEST_DIR}"
-BACKUP_SIZE="/dev/sdb1"
-FLTR_FOLDER_1="Downloads"
-FLTR_FOLDER_2="Music"
-FLTR_FOLDER_3="Videos"
-FLTR_FOLDER_4="Pictures"
-FLTR_FOLDER_5="log"
-FLTR_FOLDER_6="Public"
-FLTR_FOLDER_7=".cache"
-LOG="/home/${USER}/.log/backup.log"
+$ sudo backup --config
 ```
 
-*(!!)* you might also need to manually create new `backup.marker` file at destination backup folder.
+edit file `/etc/equilibrium.conf` to change whatever necessary to suit your backup behaviour,
+
+```bash
+##### configurations for `backup` script
+
+USER="loouis"
+BACKUP_SOURCE="/home/${USER}"
+BACKUP_MEDIUM="/media/${USER}/EX-VOLUME-A"
+BACKUP_DESTINATION="${BACKUP_MEDIUM}/.backup/usr-${USER}"
+
+##### configuration for `equilibrium-core` script
+
+bandwidth_limit=50000
+exclusion_list='/etc/equilibrium-exclusion.list'
+```
+
+### _exclusion
+
+to add file or directories into backup session,
+
+```bash
+$ sudo backup --exclusion
+```
 
 ### _run
 
 simply,
 
 ```bash
-$ sudo backup
+$ sudo backup --run
 ```
 
-or add to `cronjob` as example,
+or add one of them to `cronjob`,
 
 ```bash
-@monthly sudo /usr/local/bin/backup
-@weekly sudo /usr/local/bin/backup
+@monthly sudo /usr/local/bin/backup --run
 ```
+
+or
+
+```bash
+@weekly sudo /usr/local/bin/backup --run
+```
+
+Enjoy!
 
 ---
 
