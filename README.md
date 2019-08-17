@@ -62,6 +62,8 @@ $ sudo backup --config
 
 edit file `/etc/equilibrium.conf` to change whatever necessary to suit your backup behaviour,
 
+*(!!)* value for `bandwidth_limit` is in `kBytes`, value `50000` is `50 MBytes/s` transfer rate by default.
+
 ```bash
 ##### configurations for `backup` script
 
