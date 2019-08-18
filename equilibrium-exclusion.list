@@ -51,6 +51,7 @@ zeitgeist/
 .gphoto/
 .gradle/
 .grsync/
+.idea/
 .java/
 .keras/
 .m2/
