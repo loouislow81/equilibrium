@@ -55,7 +55,7 @@ trap 'fn_terminate_script' SIGINT
 # small utility functions for reducing code duplication
 fn_display_usage() {
   clear
-  echo;echo "#### equilibrium #####################################################";echo
+  echo;echo "#### equilibrium-core ################################################";echo
   echo "Usage: $(basename $0) [OPTION]... <SOURCE> <[USER@HOST:]DESTINATION> [exclude-pattern-file]";echo
   echo "Options"
   echo " -p, --port           SSH port"
@@ -86,7 +86,7 @@ fn_expire_backup() {
     exit 1
   fi
 
-  fn_log_info "Expiring $1"
+  fn_log_info "expiring $1"
   fn_rm "$1"
 }
 
@@ -176,7 +176,7 @@ while :; do
     break;;
 
     -?*)
-      fn_log_error "Unknown option: \"$1\""
+      fn_log_error "unknown option: \"$1\""
       fn_log_info ""
       fn_display_usage
     exit 1;;
@@ -216,7 +216,7 @@ fi
 
 for ARG in "$SRC_FOLDER" "$DEST_FOLDER" "$EXCLUSION_FILE"; do
   if [[ "$ARG" == *"'"* ]]; then
-    fn_log_error 'Source and destination directories may not contain single quote characters.'
+    fn_log_error 'source and destination directories may not contain single quote characters.'
     exit 1
   fi
 done
@@ -233,8 +233,8 @@ fn_find_backup_marker() {
 }
 
 if [ -z "$(fn_find_backup_marker "$DEST_FOLDER")" ]; then
-  fn_log_info "Safety check failed - the destination does not appear to be a backup folder or drive (marker file not found)."
-  fn_log_info "If it is indeed a backup folder, you may add the marker file by running the following command:"
+  fn_log_info "safety check failed - the destination does not appear to be a backup folder or drive (marker file not found)."
+  fn_log_info "if it is indeed a backup folder, you may add the marker file by running the following command:"
   fn_log_info ""
   fn_log_info_cmd "mkdir -p \"$DEST_FOLDER\"; touch \"$(fn_backup_marker_path "$DEST_FOLDER")\""
   fn_log_info ""
@@ -258,7 +258,7 @@ MYPID="$$"
 
 # create profile folder if it doesn't exist
 if [ ! -d "$PROFILE_FOLDER" ]; then
-  fn_log_info "Creating profile folder in '$PROFILE_FOLDER'..."
+  fn_log_info "creating profile folder in '$PROFILE_FOLDER'..."
   mkdir -- "$PROFILE_FOLDER"
 fi
 
@@ -268,11 +268,11 @@ if [ -n "$(fn_find "$INPROGRESS_FILE")" ]; then
     # TODO: Cygwin reports the name of currently running Bash scripts as just "/usr/bin/bash"
     # TODO: so the pgrep solution below won't work. Need to use "procps -wwFAH", grep
     # TODO: the script name, and extract the process ID from it.
-    fn_log_warn "Cygwin only: Previous backup task has either been interrupted or it might still be active, but there is currently no check for this. Assuming that the task was simply interrupted."
+    fn_log_warn "cygwin only: Previous backup task has either been interrupted or it might still be active, but there is currently no check for this. Assuming that the task was simply interrupted."
   else
     RUNNINGPID="$(fn_run_cmd "cat $INPROGRESS_FILE")"
     if [ "$RUNNINGPID" = "$(pgrep "$APPNAME")" ]; then
-      fn_log_error "Previous backup task is still active - aborting."
+      fn_log_error "previous backup task is still active - aborting."
       exit 1
     fi
   fi
@@ -301,12 +301,12 @@ while : ; do
 
   LINK_DEST_OPTION=""
   if [ -z "$PREVIOUS_DEST" ]; then
-    fn_log_info "No previous backup - creating new one."
+    fn_log_info "${red}(!!)${normal} no previous backup - creating new one."
   else
     # if the path is relative, it needs to be relative to the destination. To keep
     # it simple, just use an absolute path.
     PREVIOUS_DEST="$(fn_get_absolute_path "$PREVIOUS_DEST")"
-    fn_log_info "Previous backup found - doing incremental backup from $SSH_FOLDER_PREFIX$PREVIOUS_DEST"
+    fn_log_info "previous backup found - doing incremental backup from $SSH_FOLDER_PREFIX$PREVIOUS_DEST"
     LINK_DEST_OPTION="--link-dest='$PREVIOUS_DEST'"
   fi
 
@@ -315,7 +315,7 @@ while : ; do
   # -----------------------------------------------------------------------------
 
   if [ -z "$(fn_find "$DEST -type d" 2> /dev/null)" ]; then
-    fn_log_info "Creating destination $SSH_FOLDER_PREFIX$DEST"
+    fn_log_info "creating destination $SSH_FOLDER_PREFIX$DEST"
     fn_mkdir "$DEST"
   fi
 
@@ -332,7 +332,7 @@ while : ; do
 
     # skip if failed to parse date...
     if [ -z "$TIMESTAMP" ]; then
-      fn_log_warn "Could not parse date: $FILENAME"
+      fn_log_warn "could not parse date: $FILENAME"
       continue
     fi
 
@@ -355,9 +355,9 @@ while : ; do
 
   LOG_FILE="$PROFILE_FOLDER/$(date +"%Y-%m-%d-%H%M%S").log"
 
-  fn_log_info "Starting backup..."
-  fn_log_info "From: $SRC_FOLDER/"
-  fn_log_info "To:   $SSH_FOLDER_PREFIX$DEST/"
+  fn_log_info "starting backup session..."
+  fn_log_info "from: $SRC_FOLDER/"
+  fn_log_info "to: $SSH_FOLDER_PREFIX$DEST/"
 
   CMD="rsync"
 
@@ -377,7 +377,7 @@ while : ; do
   CMD="$CMD -- '$SRC_FOLDER/' '$SSH_FOLDER_PREFIX$DEST/'"
   CMD="$CMD | grep -E '^deleting|[^/]$'"
 
-  fn_log_info "Running command:"
+  fn_log_info "running with args:"
   fn_log_info "$CMD"
 
   fn_run_cmd "echo $MYPID > $INPROGRESS_FILE"
@@ -389,13 +389,13 @@ while : ; do
   # -----------------------------------------------------------------------------
 
   # TODO: find better way to check for out of space condition without parsing log.
-  NO_SPACE_LEFT="$(grep "No space left on device (28)\|Result too large (34)" "$LOG_FILE")"
+  NO_SPACE_LEFT="$(grep "no space left on device (28)\|result too large (34)" "$LOG_FILE")"
 
   if [ -n "$NO_SPACE_LEFT" ]; then
-    fn_log_warn "No space left on device - removing oldest backup and resuming."
+    fn_log_warn "no space left on device - removing oldest backup and resuming."
 
     if [[ "$(fn_find_backups | wc -l)" -lt "2" ]]; then
-      fn_log_error "No space left on device, and no old backup to delete."
+      fn_log_error "no space left on device, and no old backup to delete."
       exit 1
     fi
 
@@ -410,11 +410,11 @@ while : ; do
   # -----------------------------------------------------------------------------
 
   if [ -n "$(grep "rsync:" "$LOG_FILE")" ]; then
-    fn_log_warn "Rsync reported a warning, please check '$LOG_FILE' for more details."
+    fn_log_warn "rsync reported a warning, please check '$LOG_FILE' for more details."
   fi
 
   if [ -n "$(grep "rsync error:" "$LOG_FILE")" ]; then
-    fn_log_error "Rsync reported an error, please check '$LOG_FILE' for more details."
+    fn_log_error "rsync reported an error, please check '$LOG_FILE' for more details."
     exit 1
   fi
 
@@ -428,7 +428,7 @@ while : ; do
   fn_rm "$INPROGRESS_FILE"
   rm -f -- "$LOG_FILE"
 
-  fn_log_info "(!!) Backup completed without errors."
+  fn_log_info "(DONE) backup completed without errors."
 
   exit 0
 done
