@@ -39,6 +39,7 @@ zeitgeist/
 .cabal/
 .cabal-desktop/
 .cache/
+.compiz/
 .config/
 .dat/
 .dat-desktop/
