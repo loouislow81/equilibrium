@@ -1,6 +1,6 @@
 # equilibrium
 
-> Time machine backup solution for Linux
+> A lightweight low-level time machine backup utility for Linux
 
 I wrote this because at my workplace has a terrible IT culture. That backing data is an optional practice. **Equilibrium** helps me to  incrementally backup changes on my working computer, I need something very straight forward and lightweight but not sacrifying the backup performance or even hogging the host system. And I also can even configure with `crontab`.
 
