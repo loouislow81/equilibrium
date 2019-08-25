@@ -1,4 +1,4 @@
-# equilibrium
+# equilibrium 1.0.23
 
 > A lightweight low-level time machine backup utility for Linux
 
@@ -51,6 +51,8 @@ $ cd equilibrium
 ```bash
 $ sudo ./backup --install
 ```
+
+or if you prefer binary version, go [download binary](https://github.com/loouislow81/equilibrium/releases/download/v1.0.23/equilibrium_1.0.23_x86-64_linux.tar.gz).
 
 ### _configure
 
