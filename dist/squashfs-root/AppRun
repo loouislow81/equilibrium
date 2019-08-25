@@ -1,0 +1,12 @@
+#!/bin/sh
+
+#
+# @@script: AppRun.sh
+# @@description: AppImage manifest file
+#
+
+# all arguments are redirect into AppImage env
+cd "$(dirname "$0")"
+
+# "$@" is to allow arguments
+exec ./cli "$@"

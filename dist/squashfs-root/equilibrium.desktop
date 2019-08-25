@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=equilibrium
+Exec=AppRun
+Icon=icon
+Type=Application
+Categories=Network;
+Name[en_US]=equilibrium
