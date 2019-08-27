@@ -11,6 +11,23 @@
 
 source /etc/equilibrium.conf
 
+##### miscellaneous
+
+blue='\e[94m'
+cyan='\e[36m'
+green='\e[92m'
+red='\e[91m'
+dgray='\e[90m'
+lgray='\e[37m'
+bggray='\e[100m'
+bgcyan='\e[46m'
+nc='\033[0m'
+bold=$(tput bold)
+normal=$(tput sgr0)
+tag='\e[100m'
+title="${blue}(equilibrium)${nc}"
+arrow="${red}>>${nc}"
+
 ###### funcs ######
 
 run_as_root() {
