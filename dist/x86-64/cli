@@ -7,6 +7,10 @@
 # @@license: MIT
 #
 
+###### imports ######
+
+source /etc/equilibrium.conf
+
 ##### miscellaneous
 
 blue='\e[94m'
@@ -23,10 +27,6 @@ normal=$(tput sgr0)
 tag='\e[100m'
 title="${blue}(equilibrium)${nc}"
 arrow="${red}>>${nc}"
-
-###### imports ######
-
-source /etc/equilibrium.conf
 
 ###### funcs ######
 
