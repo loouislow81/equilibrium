@@ -13,7 +13,7 @@ I wrote this because at my workplace has a terrible IT culture. That backing dat
 
 ### _files
 
-- `backup` is an main script.
+- `equilibrium` is a main script.
 - `equilibrium-core` is a core script.
 - `equilibrium.conf` is where settings are located.
 - `equilibrium-exclusion.list` is where you can add exclusion files and directories.
