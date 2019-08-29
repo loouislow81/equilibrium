@@ -28,6 +28,8 @@ tag='\e[100m'
 title="${blue}(equilibrium)${nc}"
 arrow="${red}>>${nc}"
 
+build_version="1.0.32-build"
+
 ###### funcs ######
 
 run_as_root() {
@@ -71,7 +73,7 @@ banner() {
   echo -e " |  __/ (_| | |_| | | | | |_) | |  | | |_| | | | | | |"
   echo -e "  \___|\__, |\__,_|_|_|_|_.__/|_|  |_|\__,_|_| |_| |_|"
   echo -e "          | |                                         "
-  echo -e "          |_|${normal}";echo
+  echo -e "          |_|  ver: v${build_version}${normal}";echo
 }
 
 ###### init ######
@@ -101,7 +103,7 @@ while test "$#" -gt 0; do
     -i|--install)
     shift
       run_as_root
-      copy_files "./equilibrium-core" "/usr/local/bin/"
+      copy_files "./equilibrium ./equilibrium-core" "/usr/local/bin/"
       copy_files "./equilibrium.conf ./equilibrium-exclusion.list" "/etc/"
     shift;;
 
