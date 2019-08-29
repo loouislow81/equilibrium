@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# @@script: backup.sh
+# @@script: equilibrium.sh
 # @@description: equilibrium main run script
 # @@author: Loouis Low (loouis@gmail.com)
 # @@copyright: Loouis Low (https://github.com/loouislow81/equilibrium)
@@ -59,7 +59,7 @@ create_marker() {
 
 run_backup() {
   echo -e "$title started..."
-  ./equilibrium-core ${BACKUP_SOURCE} ${BACKUP_DESTINATION}
+  exec $PWD/equilibrium-core ${BACKUP_SOURCE} ${BACKUP_DESTINATION}
   echo -e "$title backup $arrow done!"
 }
 
@@ -101,7 +101,7 @@ while test "$#" -gt 0; do
     -i|--install)
     shift
       run_as_root
-      copy_files "./equilibrium" "/usr/local/bin/"
+      copy_files "./equilibrium-core" "/usr/local/bin/"
       copy_files "./equilibrium.conf ./equilibrium-exclusion.list" "/etc/"
     shift;;
 
@@ -142,4 +142,3 @@ while test "$#" -gt 0; do
 
   esac
 done
-

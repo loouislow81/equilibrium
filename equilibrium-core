@@ -54,14 +54,13 @@ trap 'fn_terminate_script' SIGINT
 
 # small utility functions for reducing code duplication
 fn_display_usage() {
-  clear
   echo;echo "#### equilibrium-core ################################################";echo
   echo "Usage: $(basename $0) [OPTION]... <SOURCE> <[USER@HOST:]DESTINATION> [exclude-pattern-file]";echo
   echo "Options"
-  echo " -p, --port           SSH port"
-  echo " -h, --help           Display this help message"
-  echo " --rsync-get-flags    Display the default rsync flags that are used for backup"
-  echo " --rsync-set-flags    Set the rsync flags that are going to be used for backup";echo
+  echo " -p, --port .................. SSH port"
+  echo " -h, --help .................. Display this help message"
+  echo " --rsync-get-flags ........... Display the default rsync flags that are used for backup"
+  echo " --rsync-set-flags ........... Set the rsync flags that are going to be used for backup";echo
 }
 
 fn_parse_date() {
