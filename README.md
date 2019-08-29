@@ -1,4 +1,4 @@
-# equilibrium 1.0.23
+# equilibrium 1.0.32
 
 > A lightweight low-level time machine backup utility for Linux
 
