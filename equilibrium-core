@@ -143,7 +143,7 @@ SRC_FOLDER=""
 DEST_FOLDER=""
 EXCLUSION_FILE=""
 
-RSYNC_FLAGS="-D --partial --progress --compress --stats --numeric-ids --links --hard-links --one-file-system --itemize-changes --times --recursive --perms --owner --group --bwlimit=${bandwidth_limit} --exclude-from=${exclusion_list}"
+RSYNC_FLAGS="-D --append --progress --compress --stats --numeric-ids --links --hard-links --one-file-system --itemize-changes --times --recursive --perms --owner --group --bwlimit=${bandwidth_limit} --exclude-from=${exclusion_list}"
 
 while :; do
   case $1 in
