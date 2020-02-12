@@ -49,7 +49,7 @@ $ cd equilibrium
 ### _install
 
 ```bash
-$ sudo ./backup --install
+$ sudo ./equilibrium --install
 ```
 
 or if you prefer binary version, go [download binary](https://github.com/loouislow81/equilibrium/releases).
@@ -59,7 +59,7 @@ or if you prefer binary version, go [download binary](https://github.com/loouisl
 after installed you can use without the `./` and it is ready to run system-wide,
 
 ```bash
-$ sudo backup --config
+$ sudo equilibrium --config
 ```
 
 edit file `/etc/equilibrium.conf` to change whatever necessary to suit your backup behaviour,
@@ -85,7 +85,7 @@ exclusion_list='/etc/equilibrium-exclusion.list'
 to add file or directories into backup session,
 
 ```bash
-$ sudo backup --exclusion
+$ sudo equilibrium --exclusion
 ```
 
 ### _run
@@ -93,19 +93,19 @@ $ sudo backup --exclusion
 simply,
 
 ```bash
-$ sudo backup --run
+$ sudo equilibrium --run
 ```
 
 or add one of them to `cronjob`,
 
 ```bash
-@monthly sudo /usr/local/bin/backup --run
+@monthly sudo /usr/local/bin/equilibrium --run
 ```
 
 or
 
 ```bash
-@weekly sudo /usr/local/bin/backup --run
+@weekly sudo /usr/local/bin/equilibrium --run
 ```
 
 Enjoy!
