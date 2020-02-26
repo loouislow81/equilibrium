@@ -75,9 +75,15 @@ zeitgeist/
 .steam/
 .steampath/
 .swt/
+.thumbnails/
 .vagrant.d/
 .wine/
 .yarn/
 
 Thumbs.db
 Thumbs.db:encryptable
+
+package-lock.json
+yarn-lock.json
+pnpm-lock.json
+
