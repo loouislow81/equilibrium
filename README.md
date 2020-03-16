@@ -1,5 +1,20 @@
 # equilibrium 1.0.32
 
+<p align="left">
+  <img src="https://badgen.net/github/release/loouislow81/sweep">
+  <img src="https://badgen.net/github/releases/loouislow81/sweep">
+  <img src="https://badgen.net/github/assets-dl/loouislow81/sweep">
+  <img src="https://badgen.net/github/branches/loouislow81/sweep">
+  <img src="https://badgen.net/github/forks/loouislow81/sweep">
+  <img src="https://badgen.net/github/stars/loouislow81/sweep">
+  <img src="https://badgen.net/github/watchers/loouislow81/sweep">
+  <img src="https://badgen.net/github/tag/loouislow81/sweep">
+  <img src="https://badgen.net/github/commits/loouislow81/sweep">
+  <img src="https://badgen.net/github/last-commit/loouislow81/sweep">
+  <img src="https://badgen.net/github/contributors/loouislow81/sweep">
+  <img src="https://badgen.net/github/license/loouislow81/sweep">
+</p>
+
 > A lightweight low-level time machine backup utility for Linux
 
 I wrote this because at my workplace has a terrible IT culture. That backing data is an optional practice. **Equilibrium** helps me to  incrementally backup changes on my working computer, I need something very straight forward and lightweight but not sacrifying the backup performance or even hogging the host system. And I also can even configure with `crontab`.
@@ -112,24 +127,4 @@ Enjoy!
 
 ---
 
-MIT License
-
-Copyright (c) 2018 Loouis Low
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+[MIT](https://github.com/loouislow81/equilibrium/blob/master/LICENSE)
