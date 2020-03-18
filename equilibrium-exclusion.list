@@ -8,7 +8,6 @@ Public/
 Steam/
 Videos/
 
-c9.fs/mock/
 firefox/
 gvfs-metadata/
 golem-apps/
@@ -33,11 +32,11 @@ zeitgeist/
 .android/
 .androidjs/
 .aptitude/
+.c9/
 .cabal/
 .cabal-desktop/
 .cache/
 .compiz/
-.config/
 .dat/
 .dat-desktop/
 .dbus/
@@ -77,6 +76,7 @@ zeitgeist/
 .swt/
 .thumbnails/
 .vagrant.d/
+.vscode/
 .wine/
 .yarn/
 
@@ -84,6 +84,5 @@ Thumbs.db
 Thumbs.db:encryptable
 
 package-lock.json
-yarn-lock.json
+yarn.lock
 pnpm-lock.json
-
