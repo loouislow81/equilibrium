@@ -20,10 +20,10 @@
 I wrote this because at my workplace has a terrible IT culture. That backing data is an optional practice. **Equilibrium** helps me to  incrementally backup changes on my working computer, I need something very straight forward and lightweight but not sacrifying the backup performance or even hogging the host system. And I also can even configure with `crontab`.
 
 <p align="left">
-  <img src="Screenshot_1.png" width="420">
-  <img src="Screenshot_2.png" width="420">
-  <img src="Screenshot_3.png" width="420">
-  <img src="Screenshot_4.png" width="420">
+  <img src="assets/Screenshot_1.png" width="49%" height="auto">
+  <img src="assets/Screenshot_2.png" width="49%" height="auto">
+  <img src="assets/Screenshot_3.png" width="49%" height="auto">
+  <img src="assets/Screenshot_4.png" width="49%" height="auto">
 </p>
 
 ### _files
